@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback - PWEAR</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    body {
+      background: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+ 
+    .wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+ 
+    h1 {
+      color: #ff1900;
+      font-size: clamp(22px, 5vw, 32px);
+      margin-bottom: 6px;
+      margin-top: 10px;
+    }
+ 
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 12px;
+      font-size: clamp(16px, 4vw, 22px);
+    }
+ 
+    .tagline { color: #888; margin-bottom: 20px; font-size: 14px; }
+ 
+    label {
+      display: block;
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 6px;
+      margin-top: 14px;
+    }
+ 
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      background: #111;
+      border: 1px solid #333;
+      color: white;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+    }
+ 
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #ff1900;
+    }
+ 
+    textarea { resize: vertical; min-height: 100px; }
+ 
+    #stars { display: flex; gap: 6px; margin-top: 6px; }
+ 
+    #stars span {
+      font-size: 30px;
+      cursor: pointer;
+      color: #333; /* grey by default */
+      transition: color 0.1s;
+      line-height: 1;
+    }
+ 
+    button {
+      background: #ff1900;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 16px;
+      width: 100%;
+    }
+ 
+    button:hover { background: #cc1400; }
+ 
+    #toast {
+      display: none;
+      background: #ff1900;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+ 
+    .card {
+      background: #111;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+ 
+    .card .top {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+ 
+    .card .name  { font-weight: bold; font-size: 14px; }
+    .card .stars { color: #ff1900; font-size: 13px; }
+    .card .info  { color: #555; font-size: 12px; margin-bottom: 6px; }
+    .card .msg   { color: #aaa; font-size: 13px; line-height: 1.6; }
+ 
+    .back-link {
+      display: inline-block;
+      color: white;
+      background: #222;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      margin-top: 24px;
+    }
+ 
+    .back-link:hover { background: #333; }
+ 
+    @media (max-width: 360px) {
+      #stars span { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+ 
+  <div class="wrapper">
+ 
+    <h1>PWEAR - Feedback</h1>
+    <p class="tagline">Got ideas? Let us know!</p>
+ 
+    <div id="toast">Thanks for your feedback!</div>
+ 
+    <label>Name (optional)</label>
+    <input type="text" id="fbName" placeholder="Your name">
+ 
+    <label>Category</label>
+    <select id="fbCategory">
+      <option>General</option>
+      <option>Website Design</option>
+      <option>Products</option>
+      <option>Checkout Experience</option>
+      <option>Suggestion</option>
+    </select>
+ 
+    <label>Rating</label>
+    <div id="stars">
+      <span data-v="1">&#9733;</span>
+      <span data-v="2">&#9733;</span>
+      <span data-v="3">&#9733;</span>
+      <span data-v="4">&#9733;</span>
+      <span data-v="5">&#9733;</span>
+    </div>
+ 
+    <label>Your Feedback</label>
+    <textarea id="fbMessage" placeholder="What do you think about PWEAR?"></textarea>
+ 
+    <button onclick="submitFeedback()">Submit</button>
+ 
+    <h2>What Others Are Saying</h2>
+    <div id="list">
+      <p style="color:#555;">No feedback yet. Be the first!</p>
+    </div>
+ 
+    <a href="shop.html" class="back-link">&#8592; Back to Shop</a>
+ 
+  </div>
+ 
+  <script>
+    let rating = 0;
+    let feedbacks = []; // plain array - resets on every reload
+ 
+    const starSpans = document.querySelectorAll("#stars span");
+ 
+    starSpans.forEach(star => {
+      star.onclick    = () => { rating = parseInt(star.dataset.v); paintStars(rating); };
+      star.onmouseover = () => paintStars(parseInt(star.dataset.v));
+      star.onmouseout  = () => paintStars(rating);
+    });
+ 
+    function paintStars(val) {
+      starSpans.forEach(s => {
+        s.style.color = parseInt(s.dataset.v) <= val ? "#ff1900" : "#333";
+      });
+    }
+ 
+    function submitFeedback() {
+      const msg = document.getElementById("fbMessage").value.trim();
+      if (!msg) { alert("Please write something first!"); return; }
+ 
+      feedbacks.unshift({
+        name:     document.getElementById("fbName").value.trim() || "Anonymous",
+        category: document.getElementById("fbCategory").value,
+        rating:   rating,
+        message:  msg,
+        date:     new Date().toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })
+      });
+ 
+      document.getElementById("fbName").value = "";
+      document.getElementById("fbMessage").value = "";
+      document.getElementById("fbCategory").value = "General";
+      rating = 0;
+      paintStars(0);
+ 
+      const toast = document.getElementById("toast");
+      toast.style.display = "block";
+      setTimeout(() => toast.style.display = "none", 3000);
+ 
+      showFeedbacks();
+    }
+ 
+    function showFeedbacks() {
+      const list = document.getElementById("list");
+      if (feedbacks.length === 0) {
+        list.innerHTML = "<p style='color:#555;'>No feedback yet. Be the first!</p>";
+        return;
+      }
+      list.innerHTML = feedbacks.map(f => `
+        <div class="card">
+          <div class="top">
+            <span class="name">${f.name}</span>
+            <span class="stars">${f.rating > 0 ? "&#9733;".repeat(f.rating) + "&#9734;".repeat(5 - f.rating) : "No rating"}</span>
+          </div>
+          <div class="info">${f.category} &middot; ${f.date}</div>
+          <div class="msg">${f.message}</div>
+        </div>
+      `).join("");
+    }
+  </script>
+ 
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Info</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg">
+
+<div class="card">
+
+ <img src="profile.png" class="avatar">
+
+ <h2 class="title">PROFILE</h2>
+
+ <form onsubmit="goShop(event)">
+ <input id="name" class="input" type="text" placeholder="Full Name" required>
+ <input class="input" type="text" placeholder="Number" required>
+ <input class="input" type="email" placeholder="Email" required>
+ <input class="input" type="password" placeholder="Password" required>
+ <input class="input" type="password" placeholder="Confirm Password" required>
+
+ <button class="btn submit">SIGN UP</button>
+ </form>
+
+</div>
+
+<script>
+function goShop(e){
+ e.preventDefault();
+ const name = document.getElementById("name").value;
+ localStorage.setItem("user", name);
+ window.location.href = "shop.html";
+}
+</script>
+
+</body>
+</html>

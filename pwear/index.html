@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PWEAR Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg">
+
+<div class="card">
+  <h1 class="title">GET STARTED</h1>
+
+  <input type="email" placeholder="EMAIL" class="input" id="emailInput" required>
+  <input type="password" placeholder="PASSWORD" class="input" id="passwordInput" required>
+
+  <p class="error-msg" id="errorMsg"></p>
+
+  <button class="btn fb">Continue with Facebook</button>
+  <button class="btn ig">Continue with Instagram</button>
+
+  <p class="forgot">Forgot your password?</p>
+
+  <button class="btn sign" onclick="validateLogin()">SIGN IN</button>
+</div>
+
+<script>
+  function validateLogin() {
+    const email = document.getElementById("emailInput").value.trim();
+    const password = document.getElementById("passwordInput").value.trim();
+    const errorMsg = document.getElementById("errorMsg");
+
+    if (!email && !password) {
+      errorMsg.textContent = "Please enter your email and password.";
+      return;
+    }
+    if (!email) {
+      errorMsg.textContent = "Please enter your email.";
+      return;
+    }
+    if (!password) {
+      errorMsg.textContent = "Please enter your password.";
+      return;
+    }
+
+    errorMsg.textContent = "";
+    location.href = "userinfo.html";
+  }
+</script>
+
+</body>
+</html>
